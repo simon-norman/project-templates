@@ -1,17 +1,17 @@
 {
-  "name": "@breeze32/project-templates",
-  "version": "1.0.2",
-  "author": "Simon Norman",
-  "devDependencies": {
-    "@biomejs/biome": "1.5.3",
-    "@biomejs/cli-darwin-arm64": "^1.5.3",
-    "@types/minimist": "^1.2.5",
-    "minimist": "^1.2.8",
-    "plop": "4.0.1"
-  },
-  "bin": {
-    "create-template": "bun ./index.ts"
-  },
-  "license": "MIT",
-  "preferGlobal": true
+	"name": "@breeze32/project-templates",
+	"version": "1.0.2",
+	"author": "Simon Norman",
+	"devDependencies": {
+		"@biomejs/biome": "1.5.3",
+		"@types/minimist": "1.2.5",
+		"minimist": "1.2.8",
+		"plop": "4.0.1",
+		"typescript": "5.3.3"
+	},
+	"bin": {
+		"create-template": "bun ./index.ts"
+	},
+	"license": "MIT",
+	"preferGlobal": true
 }

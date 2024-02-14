@@ -1,39 +1,49 @@
 import { NodePlopAPI } from "plop";
-import { addPlopShell } from "./src/helpers/run-shell";
+import {
+	biomeJson,
+	newProjectAction,
+	packageJson,
+	tsconfig,
+	vsCode,
+} from "src/helpers/actions/add-actions";
+import { nameInput } from "src/helpers/prompts/base-prompts";
+import { addPlopShell, runShell } from "./src/helpers/run-shell";
 
 export default function (plop: NodePlopAPI) {
 	addPlopShell(plop);
 	// plop generator code
-	plop.setGenerator("basic-typescript-project", {
-		description:
-			"add core shared resources (e.g. eslint) plus config to project",
-		prompts: [
-			{
-				type: "input",
-				name: "name",
-				message: "Project name (lowercase, hyphens not spaces, e.g. beer-api)",
+	plop.setGenerator("basic-bun-typescript-project", {
+		description: "create basic bun typescript project",
+		prompts: [nameInput],
+		actions: [
+			newProjectAction(packageJson),
+			newProjectAction(tsconfig),
+			newProjectAction(vsCode),
+			newProjectAction(biomeJson),
+			(answers) => {
+				return runShell(
+					`sh ${__dirname}/src/templates/base-typescript/bun-base-project-setup.sh ${answers.name}`,
+				)
+					.then(() => "success")
+					.catch((e) => `failed ${e.message}`);
 			},
 		],
+	});
+
+	plop.setGenerator("basic-pnpm-typescript-project", {
+		description: "create basic pnpm typescript project",
+		prompts: [nameInput],
 		actions: [
-			{
-				type: "add",
-				path: "{{name}}/package.json",
-				templateFile: "src/templates/base-typescript/base-package-json.hbs",
-			},
-			{
-				type: "add",
-				path: "{{name}}/biome.json",
-				templateFile: "src/templates/base-typescript/base-biome-json.hbs",
-			},
-			{
-				type: "add",
-				path: "{{name}}/tsconfig.json",
-				templateFile: "src/templates/base-typescript/base-tsconfig.hbs",
-			},
-			{
-				type: "shell",
-				// @ts-expect-error
-				command: "sh ./templates/base-typescript/base-ts-install.sh",
+			newProjectAction(packageJson),
+			newProjectAction(tsconfig),
+			newProjectAction(vsCode),
+			newProjectAction(biomeJson),
+			(answers) => {
+				return runShell(
+					`sh ${__dirname}/src/templates/base-typescript/pnpm-base-project-setup.sh ${answers.name}`,
+				)
+					.then(() => "success")
+					.catch((e) => `failed ${e.message}`);
 			},
 		],
 	});
@@ -41,73 +51,25 @@ export default function (plop: NodePlopAPI) {
 	plop.setGenerator("add-ts", {
 		description:
 			"add core shared resources (e.g. eslint) plus config to project",
-		prompts: [
-			{
-				type: "input",
-				name: "name",
-				message: "Project name (lowercase, hyphens not spaces, e.g. beer-api)",
-			},
-		],
-		actions: [
-			{
-				type: "add",
-				path: "package.json",
-				templateFile: "src/templates/base-typescript/base-package-json.hbs",
-			},
-			{
-				type: "add",
-				path: "biome.json",
-				templateFile: "src/templates/base-typescript/base-biome-json.hbs",
-			},
-			{
-				type: "add",
-				path: "tsconfig.json",
-				templateFile: "src/templates/base-typescript/base-tsconfig.hbs",
-			},
-		],
+		prompts: [nameInput],
+		actions: [packageJson, biomeJson, tsconfig],
 	});
 
 	plop.setGenerator("add-base-vscode", {
 		description: "add vscode config to current project",
 		prompts: [],
-		actions: [
-			{
-				type: "add",
-				path: ".vscode/settings.json",
-				templateFile: "src/templates/base/vscodesettings.hbs",
-			},
-		],
+		actions: [vsCode],
 	});
 
-	plop.setGenerator("add-base-tsconfig", {
+	plop.setGenerator("add-base-biome", {
 		description: "add biome config to current project",
 		prompts: [],
-		actions: [
-			{
-				type: "add",
-				path: "biome.json",
-				templateFile: "src/templates/base-typescript/base-biome-json.hbs",
-			},
-		],
+		actions: [biomeJson],
 	});
 
 	plop.setGenerator("add-tsconfig", {
 		description: "add ts config to current project",
 		prompts: [],
-		actions: [
-			{
-				type: "add",
-				path: "tsconfig.json",
-				templateFile: "src/templates/base-typescript/base-tsconfig.hbs",
-			},
-		],
+		actions: [tsconfig],
 	});
 }
-
-// typescript
-// tsconfig.json, package.json, eslint, prettier - anything else?
-// hmmmm but is this that useful?
-// in the case of shared infra - it's a pretty specific structure as it is
-// it is nice when first scaffolding something, like building out a project, to have the basics in
-// then all the other projects can sit on top of that
-// and you can have the base and then use plop to modify by adding stuff in

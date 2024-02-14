@@ -26,6 +26,11 @@ export default function (plop: NodePlopAPI) {
 				templateFile: "src/templates/base-typescript/base-biome-json.hbs",
 			},
 			{
+				type: "add",
+				path: "{{name}}/tsconfig.json",
+				templateFile: "src/templates/base-typescript/base-tsconfig.hbs",
+			},
+			{
 				type: "shell",
 				// @ts-expect-error
 				command: "sh ./templates/base-typescript/base-ts-install.sh",
@@ -54,10 +59,27 @@ export default function (plop: NodePlopAPI) {
 				path: "biome.json",
 				templateFile: "src/templates/base-typescript/base-biome-json.hbs",
 			},
+			{
+				type: "add",
+				path: "tsconfig.json",
+				templateFile: "src/templates/base-typescript/base-tsconfig.hbs",
+			},
 		],
 	});
 
-	plop.setGenerator("add-base-biome", {
+	plop.setGenerator("add-base-vscode", {
+		description: "add vscode config to current project",
+		prompts: [],
+		actions: [
+			{
+				type: "add",
+				path: ".vscode/settings.json",
+				templateFile: "src/templates/base/vscodesettings.hbs",
+			},
+		],
+	});
+
+	plop.setGenerator("add-base-tsconfig", {
 		description: "add biome config to current project",
 		prompts: [],
 		actions: [
@@ -65,6 +87,18 @@ export default function (plop: NodePlopAPI) {
 				type: "add",
 				path: "biome.json",
 				templateFile: "src/templates/base-typescript/base-biome-json.hbs",
+			},
+		],
+	});
+
+	plop.setGenerator("add-tsconfig", {
+		description: "add ts config to current project",
+		prompts: [],
+		actions: [
+			{
+				type: "add",
+				path: "tsconfig.json",
+				templateFile: "src/templates/base-typescript/base-tsconfig.hbs",
 			},
 		],
 	});

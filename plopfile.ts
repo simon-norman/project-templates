@@ -30,29 +30,23 @@ export default function (plop: NodePlopAPI) {
 		],
 	});
 
-	plop.setGenerator("basic-pnpm-typescript-project", {
-		description: "create basic pnpm typescript project",
+	plop.setGenerator("add-basic-setup", {
+		description:
+			"add core shared resources (e.g. eslint) plus config to project",
 		prompts: [nameInput],
 		actions: [
-			newProjectAction(packageJson),
-			newProjectAction(tsconfig),
-			newProjectAction(vsCode),
-			newProjectAction(biomeJson),
-			(answers) => {
+			packageJson,
+			biomeJson,
+			vsCode,
+			tsconfig,
+			() => {
 				return runShell(
-					`sh ${__dirname}/src/templates/base-typescript/pnpm-base-project-setup.sh ${answers.name}`,
+					`sh ${__dirname}/src/templates/base-typescript/bun-base-project-setup.sh ./`,
 				)
 					.then(() => "success")
 					.catch((e) => `failed ${e.message}`);
 			},
 		],
-	});
-
-	plop.setGenerator("add-ts", {
-		description:
-			"add core shared resources (e.g. eslint) plus config to project",
-		prompts: [nameInput],
-		actions: [packageJson, biomeJson, tsconfig],
 	});
 
 	plop.setGenerator("add-base-vscode", {

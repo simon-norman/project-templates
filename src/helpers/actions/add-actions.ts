@@ -30,3 +30,9 @@ export const packageJson: AddActionConfig = {
 	path: "package.json",
 	templateFile: "src/templates/base-typescript/base-package-json.hbs",
 };
+
+export const gitIgnore: AddActionConfig = {
+	type: "add",
+	path: ".gitignore",
+	templateFile: "src/templates/base-typescript/base-gitignore.hbs",
+};

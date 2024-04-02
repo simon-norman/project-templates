@@ -1,6 +1,7 @@
 import { NodePlopAPI } from "plop";
 import {
 	biomeJson,
+	gitIgnore,
 	newProjectAction,
 	packageJson,
 	tsconfig,
@@ -47,6 +48,18 @@ export default function (plop: NodePlopAPI) {
 					.catch((e) => `failed ${e.message}`);
 			},
 		],
+	});
+
+	plop.setGenerator("add-base-ts-gitignore", {
+		description: "add ts gitignore to current project",
+		prompts: [],
+		actions: [gitIgnore],
+	});
+
+	plop.setGenerator("add-base-package-json", {
+		description: "add vscode config to current project",
+		prompts: [nameInput],
+		actions: [packageJson],
 	});
 
 	plop.setGenerator("add-base-vscode", {

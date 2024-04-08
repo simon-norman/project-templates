@@ -1,0 +1,16 @@
+version: '2.19'
+services:
+  install:
+    image: install
+    build:
+      context: .
+      dockerfile: Dockerfile.install
+  {{serviceName}}:
+    build:
+      context: .
+      dockerfile: applications/{{serviceName}}/Dockerfile
+      target: release
+    depends_on:
+      - install
+    ports:
+      - "3000:3000"

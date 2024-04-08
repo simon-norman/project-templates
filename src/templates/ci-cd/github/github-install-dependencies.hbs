@@ -1,0 +1,10 @@
+name: Build install docker image
+on:
+  push: {}
+jobs:
+  build-with-docker:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: simon-norman/actions/build-cached@v1
+        name: Install dependencies

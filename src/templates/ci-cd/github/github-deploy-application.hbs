@@ -1,0 +1,19 @@
+name: Deploy {{serviceName}} to dev one
+
+on:
+  workflow_run:
+    workflows: ["Build install docker image"]
+    types:
+      - completed
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment: {{projectEnv}}
+    steps:
+      - uses: simon-norman/actions/deploy@v1
+        name: Deploy
+        with:
+          env: {{projectEnv}}
+          file: ./monorepo/applications/{{serviceName}}/Dockerfile
+          tag: {{serviceName}}-{{projectEnv}}:latest

@@ -1,0 +1,19 @@
+# syntax = edrevo/dockerfile-plus
+
+INCLUDE+ Dockerfile.install
+
+FROM install as test
+RUN cd /temp/dev/applications/{{serviceName}} && bun test
+
+FROM base AS release
+COPY --from=install /temp/prod/node_modules node_modules
+COPY --from=install /temp/prod/node_modules/@breeze32/services node_modules/@breeze32/services
+RUN cd node_modules/@breeze32
+COPY applications/{{serviceName}}/src .
+COPY tsconfig.json tsconfig.json
+COPY applications/{{serviceName}}/package.json package.json
+
+# run the app
+USER bun
+EXPOSE 3000
+ENTRYPOINT [ "bun", "run", "index.ts" ]

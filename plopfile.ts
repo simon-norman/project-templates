@@ -6,12 +6,16 @@ import {
 	packageJson,
 	tsconfig,
 	vsCode,
+	vscodeMonorepoWorkspace,
 } from "src/helpers/actions/add-actions";
+import { generateMonorepoProject } from "src/helpers/generators/generate-monorepo-project";
 import { nameInput } from "src/helpers/prompts/base-prompts";
+import { setVsCodeSettingsPartial } from "src/templates/base/vscode-settings";
 import { addPlopShell, runShell } from "./src/helpers/run-shell";
 
 export default function (plop: NodePlopAPI) {
 	addPlopShell(plop);
+
 	// plop generator code
 	plop.setGenerator("basic-bun-typescript-project", {
 		description: "create basic bun typescript project",
@@ -30,6 +34,8 @@ export default function (plop: NodePlopAPI) {
 			},
 		],
 	});
+
+	generateMonorepoProject(plop);
 
 	plop.setGenerator("add-basic-setup", {
 		description:
@@ -62,10 +68,20 @@ export default function (plop: NodePlopAPI) {
 		actions: [packageJson],
 	});
 
+	setVsCodeSettingsPartial(plop);
+
 	plop.setGenerator("add-base-vscode", {
 		description: "add vscode config to current project",
 		prompts: [],
 		actions: [vsCode],
+	});
+
+	plop.setGenerator("add-vscode-monorepo-workspace", {
+		description: "add vscode monorepo workspace to current project",
+		prompts: [nameInput],
+		actions: (data) => {
+			return [vscodeMonorepoWorkspace(data?.name)];
+		},
 	});
 
 	plop.setGenerator("add-base-biome", {

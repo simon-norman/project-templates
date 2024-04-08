@@ -7,6 +7,16 @@ export const newProjectAction = (action: AddActionConfig) => {
 	};
 };
 
+export const newProjectActionWithName = (
+	action: AddActionConfig,
+	name: string,
+) => {
+	return {
+		...action,
+		path: `${name}/${action.path}`,
+	};
+};
+
 export const vsCode: AddActionConfig = {
 	type: "add",
 	path: ".vscode/settings.json",
@@ -36,3 +46,11 @@ export const gitIgnore: AddActionConfig = {
 	path: ".gitignore",
 	templateFile: "src/templates/base-typescript/base-gitignore.hbs",
 };
+
+export const vscodeMonorepoWorkspace = (
+	projectName: string,
+): AddActionConfig => ({
+	type: "add",
+	path: `${projectName}.code-workspace`,
+	templateFile: "src/templates/base/monorepo-workspace.hbs",
+});

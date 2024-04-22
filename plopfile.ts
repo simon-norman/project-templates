@@ -24,6 +24,26 @@ export default function (plop: NodePlopAPI) {
 			newProjectAction(packageJson),
 			newProjectAction(tsconfig),
 			newProjectAction(vsCode),
+			newProjectAction(gitIgnore),
+			newProjectAction(biomeJson),
+			(answers) => {
+				return runShell(
+					`sh ${__dirname}/src/templates/base-typescript/bun-base-project-setup.sh ${answers.name}`,
+				)
+					.then(() => "success")
+					.catch((e) => `failed ${e.message}`);
+			},
+		],
+	});
+
+	plop.setGenerator("basic-npm-package", {
+		description: "create basic bun typescript project",
+		prompts: [nameInput],
+		actions: [
+			newProjectAction(packageJson),
+			newProjectAction(tsconfig),
+			newProjectAction(vsCode),
+			newProjectAction(gitIgnore),
 			newProjectAction(biomeJson),
 			(answers) => {
 				return runShell(
